@@ -30,6 +30,9 @@ import org.redout.sol.weather.current.CurrentConditions;
 import org.redout.sol.weather.GetWxDataService;
 import org.redout.sol.weather.WxRetrofitInstance;
 import org.redout.sol.weather.dailyforecast.DailyForecast;
+import org.redout.sol.weather.darksky.DarkSkyRetrofitInstance;
+import org.redout.sol.weather.darksky.GetDarkSkyDataService;
+import org.redout.sol.weather.darksky.generated.WeatherData;
 import org.redout.sol.weather.hourlyforecast.HourlyForecast;
 import org.redout.sol.weather.hourlyforecast.HourlyForecastList;
 
@@ -92,7 +95,22 @@ public class MainActivity extends AppCompatActivity {
             getDailyForecast(location.getLatitude(), location.getLongitude());
         }
     }
+    public void getDarkSkyData(double lat, double lon, String apikey) {
+        GetDarkSkyDataService service = DarkSkyRetrofitInstance.getDarkSkyRetofitInstance().create(GetDarkSkyDataService.class);
+        Call<WeatherData> call = service.getForecast(Double.toString(lat), Double.toString(lon), "7d6f4a8df38879f75828056048610703");
+        call.enqueue(new Callback<WeatherData>() {
+            @Override
+            public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
+                System.out.println("URL :" +call.request().url());
+            }
 
+            @Override
+            public void onFailure(Call<WeatherData> call, Throwable t) {
+                Log.e("Error getting Current Conditions : ", t.getMessage());
+            }
+        });
+
+    }
     public void getCurrentConditions(double lat, double lon) {
 
         GetWxDataService service = WxRetrofitInstance.getWxRetofitInstance().create(GetWxDataService.class);
