@@ -11,8 +11,7 @@
         android:layout_marginStart="16dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/fcstIcon"

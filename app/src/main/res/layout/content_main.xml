@@ -83,11 +83,32 @@
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:id="@+id/dailyForecastRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="11dp" >
 
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/forecastRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="11dp" >
+
+            </android.support.v7.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -10,6 +10,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,12 +20,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.redout.sol.weather.WxUtil;
 import org.redout.sol.weather.current.CurrentConditions;
 import org.redout.sol.weather.GetWxDataService;
 import org.redout.sol.weather.WxRetrofitInstance;
+import org.redout.sol.weather.dailyforecast.DailyForecast;
+import org.redout.sol.weather.hourlyforecast.HourlyForecast;
+import org.redout.sol.weather.hourlyforecast.HourlyForecastList;
+
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +39,11 @@ import retrofit2.Response;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
+    private java.util.List<HourlyForecastList> forecastList = new ArrayList<>();
+    private ForecastAdapter forecastAdapter;
+    private DailyForecastAdapter dailyForecastAdapter;
+    private RecyclerView recyclerView;
+    private RecyclerView dailyForecastRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location !=null) {
             getCurrentConditions(location.getLatitude(), location.getLongitude());
+            getHourlyForecast(location.getLatitude(), location.getLongitude());
+            getDailyForecast(location.getLatitude(), location.getLongitude());
         }
     }
 
@@ -90,6 +104,52 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<CurrentConditions> call, Throwable t) {
                 Log.e("Error getting Current Conditions : ", t.getMessage());
+            }
+        });
+    }
+    public void getDailyForecast(double lat, double lon) {
+        GetWxDataService service = WxRetrofitInstance.getWxRetofitInstance().create(GetWxDataService.class);
+        Call<DailyForecast> call = service.getDailyForecast(Double.toString(lat), Double.toString(lon), "808e588f711f309776841c755a3c1802");
+        call.enqueue(new Callback<DailyForecast>() {
+            @Override
+            public void onResponse(Call<DailyForecast> call, Response<DailyForecast> response) {
+                DailyForecast dailyForecast = response.body();
+                dailyForecastAdapter = new DailyForecastAdapter(dailyForecast.getList());
+                RecyclerView.LayoutManager dailyForecastLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                dailyForecastRecyclerView = findViewById(R.id.dailyForecastRecycler);
+                dailyForecastRecyclerView.setLayoutManager(dailyForecastLayoutManager);
+                dailyForecastRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                dailyForecastRecyclerView.setAdapter(dailyForecastAdapter);
+
+            }
+
+            @Override
+            public void onFailure(Call<DailyForecast> call, Throwable t) {
+                Log.e("Error getting Forecast : ", t.getMessage());
+            }
+        });
+
+    }
+    public void getHourlyForecast(double lat, double lon) {
+        GetWxDataService service = WxRetrofitInstance.getWxRetofitInstance().create(GetWxDataService.class);
+        Call<HourlyForecast> call = service.getForecast(Double.toString(lat), Double.toString(lon), "808e588f711f309776841c755a3c1802");
+        call.enqueue(new Callback<HourlyForecast>() {
+            @Override
+            public void onResponse(Call<HourlyForecast> call, Response<HourlyForecast> response) {
+                int statusCode = response.code();
+                HourlyForecast forecast = response.body();
+                forecastAdapter = new ForecastAdapter(forecast.getList());
+                RecyclerView.LayoutManager forecastLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerView = findViewById(R.id.forecastRecycler);
+                recyclerView.setLayoutManager(forecastLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(forecastAdapter);
+                System.out.println("URL :" +call.request().url());
+            }
+
+            @Override
+            public void onFailure(Call<HourlyForecast> call, Throwable t) {
+                Log.e("Error getting Forecast : ", t.getMessage());
             }
         });
     }

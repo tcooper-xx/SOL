@@ -1,5 +1,5 @@
 
-package org.redout.sol.weather.forecast;
+package org.redout.sol.weather.hourlyforecast;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

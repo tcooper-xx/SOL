@@ -9,14 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.redout.sol.weather.WxUtil;
-import org.redout.sol.weather.hourlyforecast.HourlyForecastList;
+import org.redout.sol.weather.dailyforecast.DailyForecastList;
 
 import java.util.List;
 
 
-public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.MyViewHolder> {
+public class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.MyViewHolder> {
 
-    List<HourlyForecastList> forecastList;
+    List<DailyForecastList> forecastList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fcstHigh, fcstLow;
@@ -30,7 +30,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.MyView
         }
 
     }
-    public ForecastAdapter(java.util.List<HourlyForecastList> forecastList) {
+    public DailyForecastAdapter(List<DailyForecastList> forecastList) {
         this.forecastList = forecastList;
         System.out.println(forecastList.size());
     }
@@ -44,9 +44,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        HourlyForecastList forecastListItem = forecastList.get(position);
-        holder.fcstHigh.setText(WxUtil.convTemp(forecastListItem.getMain().getTempMax(), WxUtil.TEMP_UNIT_KELVIN, WxUtil.TEMP_UNIT_FAHRENHEIT).toString());
-        holder.fcstLow.setText(WxUtil.convTemp(forecastListItem.getMain().getTempMin(), WxUtil.TEMP_UNIT_KELVIN, WxUtil.TEMP_UNIT_FAHRENHEIT).toString());
+        DailyForecastList forecastListItem = forecastList.get(position);
+        holder.fcstHigh.setText(WxUtil.convTemp(forecastListItem.getTemp().getMax(), WxUtil.TEMP_UNIT_KELVIN, WxUtil.TEMP_UNIT_FAHRENHEIT).toString());
+        holder.fcstLow.setText(WxUtil.convTemp(forecastListItem.getTemp().getMin(), WxUtil.TEMP_UNIT_KELVIN, WxUtil.TEMP_UNIT_FAHRENHEIT).toString());
         int iconId = holder.fcstIcon.getContext().getResources().getIdentifier("wxicon_" + forecastListItem.getWeather().get(0).getIcon(), "drawable", holder.fcstIcon.getContext().getPackageName() );
         holder.fcstIcon.setImageResource(iconId);
     }

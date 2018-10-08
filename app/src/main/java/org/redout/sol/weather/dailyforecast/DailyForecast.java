@@ -1,11 +1,16 @@
 
-package org.redout.sol.weather.forecast;
+package org.redout.sol.weather.dailyforecast;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FiveDayForecast {
+import java.util.List;
 
+public class DailyForecast {
+
+    @SerializedName("city")
+    @Expose
+    private City city;
     @SerializedName("cod")
     @Expose
     private String cod;
@@ -17,10 +22,15 @@ public class FiveDayForecast {
     private Integer cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<org.redout.sol.weather.forecast.List> list = null;
-    @SerializedName("city")
-    @Expose
-    private City city;
+    private List<DailyForecastList> list = null;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public String getCod() {
         return cod;
@@ -46,20 +56,12 @@ public class FiveDayForecast {
         this.cnt = cnt;
     }
 
-    public java.util.List<org.redout.sol.weather.forecast.List> getList() {
+    public List<DailyForecastList> getList() {
         return list;
     }
 
-    public void setList(java.util.List<org.redout.sol.weather.forecast.List> list) {
+    public void setList(List<DailyForecastList> list) {
         this.list = list;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
     }
 
 }

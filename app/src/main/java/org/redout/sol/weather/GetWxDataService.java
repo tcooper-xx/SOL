@@ -1,7 +1,8 @@
 package org.redout.sol.weather;
 
 import org.redout.sol.weather.current.CurrentConditions;
-import org.redout.sol.weather.forecast.FiveDayForecast;
+import org.redout.sol.weather.dailyforecast.DailyForecast;
+import org.redout.sol.weather.hourlyforecast.HourlyForecast;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,5 +13,8 @@ public interface GetWxDataService {
     Call<CurrentConditions> getWeather(@Query("lat") String lat, @Query("lon") String lon, @Query("appid") String appid);
 
     @GET("forecast")
-    Call<FiveDayForecast> getForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("appid") String appid);
+    Call<HourlyForecast> getForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("appid") String appid);
+
+    @GET("forecast/daily")
+    Call<DailyForecast> getDailyForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("appid") String appid);
 }
