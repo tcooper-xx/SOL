@@ -8,7 +8,7 @@ public class DailyForecastList {
 
     @SerializedName("dt")
     @Expose
-    private Integer dt;
+    private Long dt;
     @SerializedName("temp")
     @Expose
     private Temp temp;
@@ -34,11 +34,11 @@ public class DailyForecastList {
     @Expose
     private Double rain;
 
-    public Integer getDt() {
+    public Long getDt() {
         return dt;
     }
 
-    public void setDt(Integer dt) {
+    public void setDt(Long dt) {
         this.dt = dt;
     }
 
